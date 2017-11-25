@@ -4,7 +4,7 @@
 param
 (
 	[Parameter()]
-    [string] $Source = "C:\Users\matt\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets",
+    [string] $Source = "$env:LOCALAPPDATA\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets",
     
     [Parameter()]
     [string] $Destination = "E:\temp\spotlightTemp",
@@ -13,10 +13,10 @@ param
     [string] $BackgroundDir = "C:\Users\matt.brower\Pictures\spotlight",
 
     [Parameter()]
-    [string] $BgTemp = "E:\temp\spotlightTemp\DesktopBg",
+    [string] $BgTemp = "E:\temp\backgrounds\DesktopBg",
 
     [Parameter()]
-    [string] $PhoneTemp = "E:\temp\spotlightTemp\PhoneBg",
+    [string] $PhoneTemp = "E:\temp\backgrounds\PhoneBg",
 
     [Parameter()]
     [switch] $Sort
@@ -35,7 +35,7 @@ foreach( $pic in $NewPics ){
 if ( $Sort ) {
     # Import tools for getting picture meta data
     . E:\git\mb\Get-FileMetaDataReturnObject.ps1
-    
+
     # Get picture meta data
     $Data = Get-FileMetaData -folder $Destination
 
