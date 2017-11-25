@@ -7,16 +7,16 @@ param
     [string] $Source = "$env:LOCALAPPDATA\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets",
     
     [Parameter()]
-    [string] $Destination = "E:\temp\spotlightTemp",
+    [string] $Destination,
 
     [Parameter()]
-    [string] $BackgroundDir = "C:\Users\matt.brower\Pictures\spotlight",
+    [string] $BackgroundDir,
 
     [Parameter()]
-    [string] $BgTemp = "E:\temp\backgrounds\DesktopBg",
+    [string] $BgTemp,
 
     [Parameter()]
-    [string] $PhoneTemp = "E:\temp\backgrounds\PhoneBg",
+    [string] $PhoneTemp,
 
     [Parameter()]
     [switch] $Sort
@@ -34,7 +34,7 @@ foreach( $pic in $NewPics ){
 
 if ( $Sort ) {
     # Import tools for getting picture meta data
-    . E:\git\mb\Get-FileMetaDataReturnObject.ps1
+    . $PSScriptRoot\Get-FileMetaDataReturnObject.ps1
 
     # Get picture meta data
     $Data = Get-FileMetaData -folder $Destination
