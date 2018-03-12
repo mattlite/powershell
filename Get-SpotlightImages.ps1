@@ -7,16 +7,16 @@ param
     [string] $Source = "$env:LOCALAPPDATA\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets",
     
     [Parameter()]
-    [string] $Destination,
+    [string] $Destination = "E:\temp\spotlightTemp",
 
     [Parameter()]
-    [string] $BackgroundDir,
+    [string] $BackgroundDir = "C:\Users\matt\Pictures\spotlight",
 
     [Parameter()]
-    [string] $PhoneTemp,
+    [string] $PhoneTemp = "E:\backgrounds\PhoneBg",
 
     [Parameter()]
-    [string] $Rejected,
+    [string] $Rejected = "E:\backgrounds\Rejects",
 
     [Parameter()]
     [switch] $Sort
@@ -36,7 +36,7 @@ foreach( $pic in $NewPics ){
 #TODO: Check for duplicates on the phoneBgs
 if ( $Sort ) {
     # Import tools for getting picture meta data
-    . $PSScriptRoot\Get-FileMetaDataReturnObject.ps1
+    . E:\git\mb\Get-FileMetaDataReturnObject.ps1
 
     # Get picture meta data
     $Data = Get-FileMetaData -folder $Destination
@@ -52,15 +52,13 @@ $OldHash = Get-ChildItem $BackgroundDir | Get-FileHash
 
 # First compare the new pictures with a list of pictures we don't want, then create a list of new good pictures.
 # Then compare the new good pictures with the existing pictures and copy over ones that don't already exsist.
-$NewGoodHash = Compare-Object $NewHash $BadHash -Property Hash -PassThru | Where-Object { $_.SideIndicator -eq '<=' }
+#$NewGoodHash = Compare-Object $NewHash $BadHash -Property Hash -PassThru | Where-Object { $_.SideIndicator -eq '<=' }
 
-foreach( $hash in $NewGoodHash ){ 
-    Compare-Object $hash.Hash $OldHash -Property Hash -PassThru |
-        Where-Object { $_.SideIndicator -eq '<='  } |
-            ForEach-Object -Process {
-                Copy-Item $_.Path -Destination $BackgroundDir
-            }
+foreach( $hash in $NewHash ){
+    Compare-Object $hash $OldHash -Property Hash -PassThru | 
+    ? { $_.SideIndicator -eq '<=' } | 
+    % { copy $_.path $BackgroundDir }
 }
 
 # Clean up temp directory
-Get-ChildItem $Destination | Remove-Item -Force
+# Get-ChildItem $Destination | Remove-Item -Force
